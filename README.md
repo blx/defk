@@ -3,11 +3,10 @@
 *Note: this is an alpha release*
 
 `defk` is a decorator for making functions that take a single dict parameter.
-Applied to a function `f(a, b, ...)`, `defk` returns a function that takes
-a single dict `d`, destructures it based on the params of `f`, and then returns
-the result of calling `f` with the extracted values: `f(a=d[a], b=d[b], ...)`.
 
-Applied to a function `f(a, b, ...)`, `defk` returns the function `g(d)`
+Applied to a function `f(a, b, ...)`, `defk` returns a function `g(d)` that takes
+a single dict `d`, extracts the keys corresponding to the params of `f`, and calls
+`f` with the values of those keys bound to the params of `f`: `f(a=d[a], b=d[b], ...)`.
 
 Applying defk simplifies the argument-binding process
 and helps enforce required vs optional keys with less boilerplate.
@@ -76,7 +75,7 @@ def splat_fnk(a, **rest):
 
 ## Rationale
 
-**Why not just use the keyword splat, `f(\*\*d)`?**
+__Why not just use the keyword splat, `f(**d)`?__
 
 The `**` operator works beautifully in many cases, but gets sticky when the dict has
 extra keys. It also doesn't provide a very useful message in the case of missing
@@ -85,7 +84,7 @@ keys, whereas `defk` will raise a KeyError containing the name of the missing ke
 If you don't need access to the entire dict via `_as`, then the following can
 generally be substituted for `defk`:
 
-```
+```python
 >>> d = {'a':1, 'b':2, 'extra':5}
 
 # If only a subset of the dict is requested:
