@@ -6,7 +6,7 @@
 Applying defk simplifies the argument-binding process
 and helps enforce required vs optional keys with less boilerplate.
 
-`defk` is adaptated from `defnk` in Prismatic's [plumbing][] library for Clojure.
+`defk` is adapted from `defnk` in Prismatic's [plumbing][] library for Clojure.
 
 [plumbing]: https://github.com/Prismatic/plumbing/tree/master/src/plumbing/fnk
 
