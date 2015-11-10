@@ -6,7 +6,8 @@
 
 Applied to a function `f(a, b, ...)`, `defk` returns a function `g(d)` that takes
 a single dict `d`, extracts the keys corresponding to the params of `f`, and calls
-`f` with the values of those keys bound to the params of `f`: `f(a=d[a], b=d[b], ...)`.
+`f` with the values of those keys bound to the params of `f`,
+ie. `f(a=d[a], b=d[b], ...)`.
 
 Applying defk simplifies the argument-binding process
 and helps enforce required vs optional keys with less boilerplate.
