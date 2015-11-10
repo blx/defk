@@ -30,7 +30,7 @@ def simple_fnk(a, c):
     return [a, c]
 ```
 
-If a key is missing, `KeyError` will be thrown, as with a normal dict.
+If a key is missing, `KeyError` will be raised, as with a normal dict.
 
 A parameter can have a default value to be supplied if not found in the dict:
 ```python
