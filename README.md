@@ -23,6 +23,8 @@ def simple_fn(d):
 can be written with `defk` like this:
 
 ```python
+from defk import defk
+
 @defk
 def simple_fnk(a, c):
     return [a, c]
