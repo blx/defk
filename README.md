@@ -2,7 +2,13 @@
 
 *Note: this is an alpha release*
 
-`defk` is a decorator for functions that take a single dict argument.
+`defk` is a decorator for making functions that take a single dict parameter.
+Applied to a function `f(a, b, ...)`, `defk` returns a function that takes
+a single dict `d`, destructures it based on the params of `f`, and then returns
+the result of calling `f` with the extracted values: `f(a=d[a], b=d[b], ...)`.
+
+Applied to a function `f(a, b, ...)`, `defk` returns the function `g(d)`
+
 Applying defk simplifies the argument-binding process
 and helps enforce required vs optional keys with less boilerplate.
 
@@ -28,6 +34,9 @@ from defk import defk
 @defk
 def simple_fnk(a, c):
     return [a, c]
+
+>>> simple_fnk({'a': 1, 'c': 5, 'm': 'ignored'})
+[1, 5]
 ```
 
 If a key is missing, `KeyError` will be raised, as with a normal dict.
@@ -65,6 +74,33 @@ def splat_fnk(a, **rest):
 ```
 
 
+## Rationale
+
+**Why not just use the keyword splat, `f(\*\*d)`?**
+
+The `**` operator works beautifully in many cases, but gets sticky when the dict has
+extra keys. It also doesn't provide a very useful message in the case of missing
+keys, whereas `defk` will raise a KeyError containing the name of the missing key.
+
+If you don't need access to the entire dict via `_as`, then the following can
+generally be substituted for `defk`:
+
+```
+>>> d = {'a':1, 'b':2, 'extra':5}
+
+# If only a subset of the dict is requested:
+>>> f = lambda a, b, c=10: [a, b, c]
+>>> f(**{k: v for k, v in d.items() if k in inspect.getargspec(f).args})
+[1, 2, 10]
+
+# Splat soaks up surplus keywords:
+>>> g = lambda a, **rest: ...
+>>> f(**d)
+[1, {'b':2, 'extra':5}]
+```
+
+However ... `defk` will be more useful with nested destructuring:
+
 ## TODO
 
 For feature parity with Prismatic's `defnk`, `defk` still needs to
@@ -75,7 +111,7 @@ support **nested bindings**.
 
 `defk` is tested on Python 2.7 and 3.5 and has no external dependencies.
 
-Tests are included (using `doctest`), and can be run by calling `defk._tests()`.
+Tests are included (using `doctest`), and can be run by calling `python defk.py -v`.
 
 
 ## Licence

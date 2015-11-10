@@ -1,4 +1,5 @@
 from inspect import getargspec
+from functools import wraps
 
 __all__ = ['defk']
 
@@ -47,7 +48,7 @@ def defk(_as=None):
     def as_fnk(a, everything):
         return [a, everything]
 
-    >>> as_fnk({'a': 1, 'b': 99})
+    > as_fnk({'a': 1, 'b': 99})
     [1, {'a': 1, 'b': 99}]
     ```
 
@@ -58,7 +59,7 @@ def defk(_as=None):
     def splat_fnk(a, **rest):
         return [a, rest]
 
-    >>> splat_fnk({'a': 1, 'b': 2, 'z': 99})
+    > splat_fnk({'a': 1, 'b': 2, 'z': 99})
     [1, {'b': 2, 'z': 99}]
     ```
     """
@@ -85,6 +86,7 @@ def defk(_as=None):
 
         defaults_begin = len(keys) - len(defaults)
 
+        @wraps(f)
         def F(d):
             args = []
 
@@ -101,6 +103,8 @@ def defk(_as=None):
                     if i >= defaults_begin:
                         args.append(defaults[i - defaults_begin])
                         continue
+                    else:
+                        raise
 
             if splat:
                 rest = {k: v for k, v in items(d)
@@ -123,6 +127,10 @@ def test_simple(x, y):
     """
     >>> test_simple({'x':1, 'y':5, 'z':10})
     6
+    >>> test_simple({'x':5})
+    Traceback (most recent call last):
+        ...
+    KeyError: 'y'
     """
     return x + y
 
@@ -139,7 +147,7 @@ def test_defaults(x, y, z=10):
 @defk
 def test_splat(x, **y):
     """
-    >>> r == test_splat({'x':1, 'a':5, 'b':3})
+    >>> r = test_splat({'x':1, 'a':5, 'b':3})
     >>> r[0] == 1
     True
     >>> r[1] == {'a':5, 'b':3}
@@ -158,8 +166,23 @@ def test_as_and_splat(x, z, **y):
     >>> r[2] == {'y':2, 'c':5}
     True
     """
-    return [x, y, z]
+    return [x, z, y]
 
-def _tests():
+@defk('whole')
+def test_complex(a, c, whole, r=101, **k):
+    """
+    >>> m = {'a':1, 'c':5, 'f':9}
+    >>> r = test_complex(m)
+    >>> r[:2] == [1, 5]
+    True
+    >>> r[3:] == [101, {'f': 9}]
+    True
+    >>> r[2] == m
+    True
+    """
+    return [a, c, whole, r, k]
+
+
+if __name__ == '__main__':
     import doctest
     doctest.testmod()
