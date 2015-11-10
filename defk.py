@@ -2,6 +2,16 @@ from inspect import getargspec
 
 __all__ = ['defk']
 
+try:
+    # python 2
+    basestring
+    items = lambda d: d.iteritems()
+except NameError:
+    # python 3
+    basestring = str
+    items = lambda d: d.items()
+
+
 def defk(_as=None):
     """This is a decorator for functions that take a single dict argument. We call
     these keyword functions. Applying defk simplifies the argument-binding process
@@ -105,14 +115,6 @@ def defk(_as=None):
         return decorator
     else:
         return decorator(f)
-
-
-def items(d):
-    """dict.items() iterator wrapper for Python 2/3"""
-    try:
-        return d.iteritems()
-    except AttributeError:
-        return d.items()
 
 
 
