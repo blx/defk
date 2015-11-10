@@ -8,7 +8,7 @@ and helps enforce required vs optional keys with less boilerplate.
 
 `defk` is adaptated from `defnk` in Prismatic's [plumbing][] library for Clojure.
 
-[plumbing]: https://github.com/Prismatic/plumbing
+[plumbing]: https://github.com/Prismatic/plumbing/tree/master/src/plumbing/fnk
 
 
 ## Examples
@@ -63,11 +63,17 @@ def splat_fnk(a, **rest):
 ```
 
 
+## TODO
+
+For feature parity with Prismatic's `defnk`, `defk` still needs to
+support **nested bindings**.
+
+
 ## Compatibility
 
 `defk` is tested on Python 2.7 and 3.5 and has no external dependencies.
 
-Tests are included (via `doctest`), and can be run by calling `defk._tests()`.
+Tests are included (using `doctest`), and can be run by calling `defk._tests()`.
 
 
 ## Licence
