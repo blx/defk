@@ -95,7 +95,7 @@ generally be substituted for `defk`:
 
 # Splat soaks up surplus keywords:
 >>> g = lambda a, **rest: ...
->>> f(**d)
+>>> g(**d)
 [1, {'b':2, 'extra':5}]
 ```
 

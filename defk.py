@@ -6,11 +6,11 @@ __all__ = ['defk']
 try:
     # python 2
     basestring
-    items = lambda d: d.iteritems()
+    items = dict.iteritems
 except NameError:
     # python 3
     basestring = str
-    items = lambda d: d.items()
+    items = dict.items
 
 
 def defk(_as=None):
